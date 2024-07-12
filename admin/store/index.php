@@ -55,7 +55,7 @@ $result = $mysqli->query($query);
         <?php echo htmlspecialchars($row['email']); ?>
         <?php echo htmlspecialchars($row['address']); ?>
         <a href="edit_store.php?id=<?php echo $row['id']; ?>">Edit</a>
-        <a href="delete_user.php?id=<?php echo $row['id']; ?>">Delete</a>
+        <a href="delete_store.php?id=<?php echo $row['id']; ?>">Delete</a>
         <?php endwhile; ?>
         </table>
         </div>
