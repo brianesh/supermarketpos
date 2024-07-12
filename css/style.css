@@ -1,0 +1,316 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+    margin: 0;
+    padding: 0;
+}
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    padding: 20px;
+    background: linear-gradient(to right, #FDFCFE, #BAA0D4);
+    width: 100%;
+}
+.left-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #ad6eec;
+    height: 500px;
+    width: 300px;
+    border-radius: 40px;
+}
+.left-container-image {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50px;
+    width: 35%; /* Adjust as needed */
+    height: 400px; /* Adjust as needed */
+    overflow: hidden; /* Hide overflow if the image is too large */
+    background-color: #ad6eec; /* Optional: background color for the container */
+    margin-bottom: 20px; /* Optional: margin below the container */
+}
+
+.logo {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: cover; /* Ensures the image covers the container without distortion */
+}
+
+.right-container {
+    padding: 10px;
+    background-color: #BAA0D4;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    border-radius: 40px;
+    width: 500px;
+    height: 500px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.right-container h1{
+    text-align: center;
+    margin-bottom: 20px;
+}
+.center-text {
+    text-align: center;
+    font-size: 36px;
+    font-weight: bold;
+    color: #000000;
+    margin-bottom: 10px;
+}
+.center-text span {
+    display: block;
+    white-space: nowrap; /* Prevents text from wrapping */
+    overflow: hidden; /* Hides overflow text */
+    border-right: 2px solid transparent; /* Initial transparent border */
+    animation: typing 3s steps(20, end); /* Animation for typing effect */
+}
+@keyframes typing {
+    from { width: 0 }
+    to { width: 100% }
+}
+.center-text span:last-child {
+    border-right: none; /* Remove border from last span */
+}
+.right-container h2 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+.right-container form {
+    text-align: left;
+}
+.right-container form label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+}
+.right-container form input[type="text"],
+.right-container form input[type="email"],
+.right-container form input[type="file"],
+.right-container form input[type="password"],
+.right-container form input[type="confirm_password"],
+.right-container form select,
+.right-container form button {
+    width: 100%;
+    padding: 5px;
+    margin-bottom: 10px;
+    border: none;
+    border-radius: 8px;
+    border-bottom: 1px solid #030303; /* Bottom border instead of full border */
+    outline: none;
+    transition: border-bottom-color 0.3s ease;
+    
+}
+.right-container form button {
+    background: linear-gradient(to right,#5f3481,#b784d7);
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+.password-input {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.password-input input[type="password"],
+.password-input input[type="text"] {
+    width: 100%;
+    padding-right: 40px; /* Adjust according to icon size */
+    box-sizing: border-box;
+}
+
+.password-input .toggle-password {
+    position: absolute;
+    right: 10px;
+    cursor: pointer;
+    user-select: none; /* Prevent text selection */
+}
+
+
+body {
+    display: flex;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f9;
+}
+
+.sidebar {
+    width: 230px;
+    height: 100vh;
+    background-color: #ad6eec;
+    color: #fff;
+    padding: 0px;
+    position: fixed;
+    overflow-y: auto;
+}
+.profile-image {
+    display: flex;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    border-bottom: 1px solid #ddd;
+    align-items: center; /* Ensures the image and text are aligned in the center */
+}
+
+.profile-image img {
+    width: 50px;  /* Adjust the size as needed */
+    height: 50px; /* Adjust the size as needed */
+    border-radius: 50%; /* Makes the image a circle */
+    margin-right: 10px; /* Space between the image and the text */
+}
+
+.profile-image h1 {
+    font-size: 24px; /* Adjust the size as needed */
+    margin: 0; /* Remove any default margins */
+    z-index: 1000;
+}
+
+.sidebar h2 {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.sidebar ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.sidebar ul li {
+    margin: 20px 0;
+}
+
+.sidebar ul li a {
+    color: #fff;
+    text-decoration: none;
+    display: block;
+    padding: 10px 15px;
+    border-radius: 5px;
+}
+
+.sidebar ul li a:hover {
+    background-color: #575757;
+}
+
+.main-content {
+    margin-left: 270px;
+    padding: 20px;
+    width: calc(100% - 270px);
+    height: 575px;
+    background: linear-gradient(to right, #FDFCFE, #BAA0D4);
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #fff;
+    padding: 10px 10px;
+    margin-left: 780px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-bottom: 0px;
+}
+
+.header .time {
+    font-size: 14px;
+    color: #333;
+}
+
+.header .notifications a {
+    font-size: 14px;
+    color: #007bff;
+    text-decoration: none;
+}
+
+.header .notifications a:hover {
+    text-decoration: underline;
+}
+
+.user {
+    font-size: 18px;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.overview {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.overview .card {
+    flex: 1 1 calc(33.333% - 20px);
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    text-align: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.overview .card h3 {
+    margin-bottom: 10px;
+    font-size: 18px;
+    color: #333;
+}
+
+.overview .card p {
+    font-size: 16px;
+    color: #666;
+    margin-bottom: 10px;
+}
+
+.overview .card a {
+    font-size: 14px;
+    color: #007bff;
+    text-decoration: none;
+}
+
+.overview .card a:hover {
+    text-decoration: underline;
+}
+
+.buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.buttons a {
+    background-color: #007bff;
+    color: #fff;
+    padding: 10px 20px;
+    text-decoration: none;
+    border-radius: 5px;
+    margin: 10px;
+    flex: 1 1 calc(33.333% - 20px);
+    text-align: center;
+    transition: background-color 0.3s;
+}
+
+.buttons a:hover {
+    background-color: #0056b3;
+}
+
+footer {
+    text-align: center;
+    padding: 10px;
+    background-color: #f1f1f1;
+    border-top: 1px solid #ccc;
+    width: 100%;
+    position: absolute;
+    bottom: 0;
+}
