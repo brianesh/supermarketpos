@@ -57,6 +57,14 @@ $mysqli->close();
                 <input type="text" id="product-search" placeholder="Type product name">
                 <button id="add-product">Add Product</button>
             </div>
+            <div class="payment-section">
+                <label for="payment-method">Payment Method:</label>
+                <select id="payment-method">
+                    <option value="cash">Cash</option>
+                    <option value="credit">Credit</option>
+                    <option value="debit">Debit</option>
+                </select>
+            </div>
             <table id="sale-table">
                 <thead>
                     <tr>
@@ -76,16 +84,8 @@ $mysqli->close();
                         <td colspan="4">Grand Total:</td>
                         <td colspan="2" id="grand-total">$0.00</td>
                     </tr>
+                </tfoot>
             </table>
-            </tfoot>
-                <div class="payment-section">
-                <label for="payment-method">Payment Method:</label>
-                <select id="payment-method">
-                    <option value="cash">Cash</option>
-                    <option value="credit">Credit</option>
-                    <option value="debit">Debit</option>
-                </select>
-            </div>
             <button id="make-sale">Make Sale</button>
         </section>
     </div>
@@ -154,16 +154,39 @@ $mysqli->close();
                     saleItems.push({ productName, unitPrice, quantity, subtotal });
                 });
 
-                $.post('process_sale.php', {
-                    paymentMethod,
-                    saleItems
-                }, function(response) {
-                    if (response.success) {
-                        window.location.href = `receipt.php?sale_id=${response.sale_id}`;
-                    } else {
-                        alert('Sale failed. Please try again.');
+                // Additional handling for cash payment
+                if (paymentMethod === 'cash') {
+                    const cashReceived = parseFloat(prompt('Enter cash received:'));
+                    if (isNaN(cashReceived) || cashReceived < totalAmount) {
+                        alert('Invalid amount. Please enter sufficient cash.');
+                        return;
                     }
-                }, 'json');
+
+                    $.post('process_sale.php', {
+                        paymentMethod: paymentMethod,
+                        saleItems: saleItems,
+                        cashReceived: cashReceived
+                    }, function(response) {
+                        if (response.success) {
+                            const balance = response.balance || 0;
+                            alert(`Sale completed successfully. Balance to give: $${balance.toFixed(2)}`);
+                            window.location.href = `receipt.php?sale_id=${response.sale_id}`;
+                        } else {
+                            alert('Sale failed. Please try again.');
+                        }
+                    }, 'json');
+                } else {
+                    $.post('process_sale.php', {
+                        paymentMethod: paymentMethod,
+                        saleItems: saleItems
+                    }, function(response) {
+                        if (response.success) {
+                            window.location.href = `receipt.php?sale_id=${response.sale_id}`;
+                        } else {
+                            alert('Sale failed. Please try again.');
+                        }
+                    }, 'json');
+                }
             });
 
             function updateGrandTotal(amount) {

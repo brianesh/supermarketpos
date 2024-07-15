@@ -74,6 +74,7 @@ $conn->close(); // Close the database connection
         </div>
     <main>
         <section>
+            <form action="process_sale.php" Method="post">
             <h2>Product List</h2>
             <table>
                 <tr>
@@ -107,6 +108,7 @@ $conn->close(); // Close the database connection
                 </tr>
                 <?php endforeach; ?>
             </table>
+            </form>
         </section>
     </main>
 </div>
