@@ -25,7 +25,7 @@ if (!isset($_SESSION['username']) || $_SESSION['role'] !== 'admin') {
 $company_name = isset($_SESSION['company_name']) ? $_SESSION['company_name'] : 'Your Company Name';
 
 // SQL query to fetch products
-$sql = "SELECT product_id, name, category_name, price, cost, sku, barcode, description, created_at, updated_at, expiration_date FROM products";
+$sql = "SELECT product_id, name, category_name, price, cost, sku, barcode, quantity, description, created_at, updated_at, expiration_date FROM products";
 $result = $conn->query($sql);
 
 $products = [];
@@ -73,6 +73,7 @@ $conn->close(); // Close the database connection
                     <th>Cost</th>
                     <th>SKU</th>
                     <th>Barcode</th>
+                    <th>Quantity</th>
                     <th>Description</th>
                     <th>Created At</th>
                     <th>Updated At</th>
@@ -88,6 +89,7 @@ $conn->close(); // Close the database connection
                     <td>$<?php echo number_format($product['cost'], 2); ?></td>
                     <td><?php echo $product['sku']; ?></td>
                     <td><?php echo $product['barcode']; ?></td>
+                    <td><?php echo $product['quantity']; ?></td>
                     <td><?php echo $product['description']; ?></td>
                     <td><?php echo $product['created_at']; ?></td>
                     <td><?php echo $product['updated_at']; ?></td>

@@ -36,13 +36,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $cost = $_POST['cost'];
     $sku = $_POST['sku'];
     $barcode = $_POST['barcode'];
+    $quantity = $_POST['quantity'];
     $description = $_POST['description'];
     $expiration_date = $_POST['expiration_date'];
     
     // Example of inserting into database with prepared statement
-    $stmt = $conn->prepare("INSERT INTO products (name, category_name, price, cost, sku, barcode, description, expiration_date) 
-                            VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
-    $stmt->bind_param("ssssssss", $name, $category_name, $price, $cost, $sku, $barcode, $description, $expiration_date);
+    $stmt = $conn->prepare("INSERT INTO products (name, category_name, price, cost, sku, barcode, quantity, description, expiration_date) 
+                            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+    $stmt->bind_param("sssssssss", $name, $category_name, $price, $cost, $sku, $barcode, $quantity, $description, $expiration_date);
     
     if ($stmt->execute()) {
         // Redirect to product list after adding product
@@ -99,6 +100,9 @@ $conn->close(); // Close the database connection
 
                 <label for="barcode">Barcode:</label>
                 <input type="text" id="barcode" name="barcode" required><br><br>
+
+                <label for="quantity">Quantity:</label>
+                <input type="text" id="quantity" name="quantity" required><br><br>
 
                 <label for="description">Description:</label>
                 <textarea id="description" name="description" rows="4" required></textarea><br><br>

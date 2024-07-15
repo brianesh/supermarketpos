@@ -33,17 +33,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['edit_product'])) {
     $cost = $_POST['cost'];
     $sku = $_POST['sku'];
     $barcode = $_POST['barcode'];
+    $barcode = $_POST['quantity'];
     $description = $_POST['description'];
     $expiration_date = $_POST['expiration_date'];
     
     // Prepare and bind SQL statement
     $sql = "UPDATE products SET 
             name=?, category_name=?, price=?, cost=?, 
-            sku=?, barcode=?, description=?, expiration_date=? 
+            sku=?, barcode=?, quantity=?, description=?, expiration_date=? 
             WHERE product_id=?";
     
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param("ssddssssi", $name, $category_name, $price, $cost, $sku, $barcode, $description, $expiration_date, $product_id);
+    $stmt->bind_param("ssssssssss", $name, $category_name, $price, $cost, $sku, $barcode, $quantity, $description, $expiration_date, $product_id);
     
     if ($stmt->execute()) {
         // Redirect to product list after editing product
@@ -123,6 +124,9 @@ $conn->close(); // Close the database connection
                 <label for="barcode">Barcode:</label>
                 <input type="text" id="barcode" name="barcode" value="<?php echo $product['barcode']; ?>" required><br><br>
 
+                <label for="quantity">Quantity:</label>
+                <input type="text" id="quantity" name="quantity" value="<?php echo $product['quantity']; ?>" required><br><br>
+                
                 <label for="description">Description:</label>
                 <textarea id="description" name="description" rows="4" required><?php echo $product['description']; ?></textarea><br><br>
 
