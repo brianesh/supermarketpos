@@ -1,13 +1,17 @@
 <?php
 session_start();
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 $mysqli = include('../../includes/db.php');
 require_once('../../includes/functions.php');
 
+// Redirect if user is not logged in or not an admin
 if (!isset($_SESSION['username']) || $_SESSION['role'] !== 'admin') {
     header('Location: ../index.php');
     exit;
 }
 
+// Fetch categories from the database
 $query = "SELECT * FROM categories";
 $result = $mysqli->query($query);
 $categories = $result->fetch_all(MYSQLI_ASSOC);
@@ -20,35 +24,56 @@ $mysqli->close();
 <head>
     <meta charset="UTF-8">
     <title>Categories - FRESHMART POS</title>
-    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../../css/style.css">
 </head>
 <body>
-    <div class="sidebar">
-        <!-- Sidebar content -->
+<div class="sidebar">
+<div class="profile-image">
+        <h1><img src="../../uploads/logosmaller.png" alt="Profile Image">FRESHMART</h1>
+    </div>
+        <ul>
+            <li><a href="../index.php">Dashboard</a></li>
+            <li><a href="stores.php">Stores</a></li>
+            <li><a href="">Users</a></li>
+            <li><a href="suppliers/index.php">Suppliers</a></li>
+            <li><a href="category.php">Category</a></li>
+            <li><a href="../products/index.php">Products</a></li>
+            <li><a href="barcodescanner.php">Barcode Scanner</a></li>
+            <li><a href="reports/index.php">Reports</a></li>
+            <li><a href="expiredgoods.php">Expired Goods</a></li>
+            <li><a href="../logout.php">Logout</a></li>
+        </ul>
     </div>
     <div class="main-content">
         <div class="header">
-            <!-- Header content -->
+            <div class="time">
+                <?php echo date('l, F j, Y h:i A'); ?>
+            </div>
+            <div class="notifications">
+            <a href="notifications.php"><i class="fa fa-bell"></i></a>
+            </div>
         </div>
         <section>
             <h2>Categories</h2>
-            <a href="add_category.php">Add New Category</a>
             <table>
                 <thead>
                     <tr>
-                        <th>ID</th>
-                        <th>Name</th>
+                        <th>Category ID</th>
+                        <th>Category Name</th>
                         <th>Description</th>
+                        <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <?php foreach ($categories as $category) : ?>
+                <a href="add_category.php">Add New Category</a>
+                    <?php foreach ($categories as $category): ?>
                         <tr>
                             <td><?php echo $category['category_id']; ?></td>
-                            <td><?php echo $category['category_name']; ?></td>
+                            <td><?php echo htmlspecialchars($category['category_name']); ?></td>
+                            <td><?php echo htmlspecialchars($category['description']); ?></td>
                             <td>
-                                <a href="edit_category.php?id=<?php echo $category['category_id']; ?>">Edit</a>
-                                <a href="delete_category.php?id=<?php echo $category['category_id']; ?>">Delete</a>
+                                <a href="edit_category.php?category_id=<?php echo $category['category_id']; ?>">Edit</a>
+                                <a href="delete_category.php?category_id=<?php echo $category['category_id']; ?>" onclick="return confirm('Are you sure you want to delete this category?');">Delete</a>
                             </td>
                         </tr>
                     <?php endforeach; ?>

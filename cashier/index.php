@@ -42,11 +42,11 @@ $getYearsSales = getYearsSales($cashier_id);
         </div>
         <ul>
             <li><a href="">Dashboard</a></li>
-            <li><a href="../category/index.php">Category</a></li>
-            <li><a href="../products/index.php">Products</a></li>
+            <li><a href="category.php">Category</a></li>
+            <li><a href="products.php">Products</a></li>
             <li><a href="../pos/index.php">POS</a></li>
             <li><a href="../expiredgoods.php">Expired Goods</a></li>
-            <li><a href="../logout.php">Logout</a></li>
+            <li><a href="logout.php">Logout</a></li>
         </ul>
     </div>
     <div class="main-content">
