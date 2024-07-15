@@ -9,6 +9,7 @@ if (!isset($_SESSION['username']) || $_SESSION['role'] !== 'admin') {
     header('Location: ../index.php');
     exit;
 }
+
 $todaysSales = todaysSales();
 $expiredProducts = expiredProducts();
 $Products = Products();
@@ -31,9 +32,9 @@ $getYearsSales = getYearsSales();
 </head>
 <body>
     <div class="sidebar">
-    <div class="profile-image">
-        <h1><img src="../uploads/logosmaller.png" alt="Profile Image">FRESHMART</h1>
-    </div>
+        <div class="profile-image">
+            <h1><img src="../uploads/logosmaller.png" alt="Profile Image">FRESHMART</h1>
+        </div>
         <ul>
             <li><a href="">Dashboard</a></li>
             <li><a href="store/index.php">Stores</a></li>
@@ -53,9 +54,8 @@ $getYearsSales = getYearsSales();
                 <?php echo date('l, F j, Y h:i A'); ?>
             </div>
             <div class="notifications">
-            <a href="notifications.php"><i class="fa fa-bell"></i></a>
+                <a href="notifications.php"><i class="fa fa-bell"></i></a>
             </div>
-            
         </div>
         <section>
             <h2>Dashboard</h2>
@@ -66,7 +66,7 @@ $getYearsSales = getYearsSales();
                 <div class="card">
                     <h3>Today's Sales</h3>
                     <p>Ksh <?php echo number_format($todaysSales, 2); ?></p>
-                    <a href="sales/">View Sales</a>
+                    <a href="sales/index.php">View Sales</a>
                 </div>
                 <div class="card">
                     <h3>Expired Products</h3>
@@ -81,26 +81,29 @@ $getYearsSales = getYearsSales();
                 <div class="card">
                     <h3>Suppliers</h3>
                     <p><?php echo $suppliers; ?></p>
+                    <a href="suppliers/">View Suppliers</a>
                 </div>
                 <div class="card">
                     <h3>Users</h3>
                     <p><?php echo $users; ?></p>
+                    <a href="users/">View Users</a>
                 </div>
                 <div class="card">
                     <h3>Week's Sales</h3>
-                    <p><?php echo $getWeeksSales; ?></p>
+                    <p>Ksh <?php echo number_format($getWeeksSales, 2); ?></p>
                 </div>
                 <div class="card">
                     <h3>Month's Sales</h3>
-                    <p><?php echo $getMonthsSales; ?></p>
+                    <p>Ksh <?php echo number_format($getMonthsSales, 2); ?></p>
                 </div>
                 <div class="card">
                     <h3>Year's Sales</h3>
-                    <p><?php echo $getYearsSales; ?></p>
+                    <p>Ksh <?php echo number_format($getYearsSales, 2); ?></p>
                 </div>
                 <div class="card">
                     <h3>Stores</h3>
                     <p><?php echo $Stores; ?></p>
+                    <a href="stores/">View Stores</a>
                 </div>
             </div>
         </section>
