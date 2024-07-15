@@ -27,12 +27,27 @@ $mysqli->close();
     <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
-    <div class="sidebar">
-        <!-- Sidebar content -->
+<div class="sidebar">
+        <div class="profile-image">
+            <h1><img src="../uploads/logosmaller.png" alt="Profile Image">FRESHMART</h1>
+        </div>
+        <ul>
+            <li><a href="">Dashboard</a></li>
+            <li><a href="category.php">Category</a></li>
+            <li><a href="products.php">Products</a></li>
+            <li><a href="../pos/index.php">POS</a></li>
+            <li><a href="../expiredgoods.php">Expired Goods</a></li>
+            <li><a href="logout.php">Logout</a></li>
+        </ul>
     </div>
     <div class="main-content">
         <div class="header">
-            <!-- Header content -->
+            <div class="time">
+                <?php echo date('l, F j, Y h:i A'); ?>
+            </div>
+            <div class="notifications">
+                <a href="../notifications.php"><i class="fa fa-bell"></i></a>
+            </div>
         </div>
         <section>
             <h2>Categories</h2>

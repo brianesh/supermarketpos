@@ -46,20 +46,32 @@ $conn->close(); // Close the database connection
 <head>
     <meta charset="UTF-8">
     <title>Manage Products - <?php echo htmlspecialchars($company_name); ?> POS</title>
-    <link rel="stylesheet" href="../../css/style.css">
+    <link rel="stylesheet" href="../css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 <body>
-    <header>
-        <h1>Manage Products</h1>
-        <nav>
-            <ul>
-                <li><a href="index.php">Cashier Dashboard</a></li>
-                <li><a href="logout.php">Logout</a></li>
-            </ul>
-        </nav>
-    </header>
-
+<div class="sidebar">
+        <div class="profile-image">
+            <h1><img src="../uploads/logosmaller.png" alt="Profile Image">FRESHMART</h1>
+        </div>
+        <ul>
+            <li><a href="">Dashboard</a></li>
+            <li><a href="category.php">Category</a></li>
+            <li><a href="products.php">Products</a></li>
+            <li><a href="../pos/index.php">POS</a></li>
+            <li><a href="../expiredgoods.php">Expired Goods</a></li>
+            <li><a href="logout.php">Logout</a></li>
+        </ul>
+    </div>
+    <div class="main-content">
+        <div class="header">
+            <div class="time">
+                <?php echo date('l, F j, Y h:i A'); ?>
+            </div>
+            <div class="notifications">
+                <a href="../notifications.php"><i class="fa fa-bell"></i></a>
+            </div>
+        </div>
     <main>
         <section>
             <h2>Product List</h2>
@@ -97,9 +109,6 @@ $conn->close(); // Close the database connection
             </table>
         </section>
     </main>
-
-    <footer>
-        <p>&copy; <?php echo date('Y'); ?> <?php echo htmlspecialchars($company_name); ?> POS. All rights reserved.</p>
-    </footer>
+</div>
 </body>
 </html>
