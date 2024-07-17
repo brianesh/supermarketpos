@@ -2,10 +2,12 @@
 session_start();
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
+
+// Include database connection and functions
 $mysqli = include('../includes/db.php');
 require_once('../includes/functions.php');
 
-// Redirect if user is not logged in
+// Redirect if user is not logged in or not a cashier/admin
 if (!isset($_SESSION['username']) || ($_SESSION['role'] !== 'cashier' && $_SESSION['role'] !== 'admin')) {
     header('Location: ../index.php');
     exit;
@@ -18,6 +20,7 @@ $products = $result->fetch_all(MYSQLI_ASSOC);
 
 $mysqli->close();
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -25,7 +28,7 @@ $mysqli->close();
     <title>POS Sale - FRESHMART POS</title>
     <link rel="stylesheet" href="../css/style.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 <body>
     <div class="sidebar">
@@ -108,7 +111,7 @@ $mysqli->close();
                     $('#sale-table tbody').append(`
                         <tr data-item="${itemCount}">
                             <td>${itemCount}</td>
-                            <td>${product.name}</td>
+                            <td>${htmlspecialchars(product.name)}</td>
                             <td>$${unitPrice}</td>
                             <td><input type="number" value="${quantity}" min="1" class="quantity" data-price="${unitPrice}"></td>
                             <td class="subtotal">$${subtotal.toFixed(2)}</td>
@@ -154,10 +157,10 @@ $mysqli->close();
                     saleItems.push({ productName, unitPrice, quantity, subtotal });
                 });
 
-                // Additional handling for cash payment
                 if (paymentMethod === 'cash') {
                     const cashReceived = parseFloat(prompt('Enter cash received:'));
-                    if (isNaN(cashReceived) || cashReceived < totalAmount) {
+
+                    if (isNaN(cashReceived) || cashReceived < grandTotal) {
                         alert('Invalid amount. Please enter sufficient cash.');
                         return;
                     }

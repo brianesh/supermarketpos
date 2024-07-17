@@ -1,5 +1,7 @@
 <?php
 session_start();
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 $mysqli = include('../includes/db.php');
 require_once('../includes/functions.php');
 
