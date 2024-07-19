@@ -35,6 +35,32 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <link rel="stylesheet" href="../../css/style.css">
 </head>
 <body>
+<div class="sidebar">
+<div class="profile-image">
+        <h1><img src="../../uploads/logosmaller.png" alt="Profile Image">FRESHMART</h1>
+    </div>
+        <ul>
+            <li><a href="../index.php">Dashboard</a></li>
+            <li><a href="">Stores</a></li>
+            <li><a href="../users/index.php">Users</a></li>
+            <li><a href="../suppliers/index.php">Suppliers</a></li>
+            <li><a href="category.php">Category</a></li>
+            <li><a href="../products/index.php">Products</a></li>
+            <li><a href="barcodescanner.php">Barcode Scanner</a></li>
+            <li><a href="../reports/index.php">Reports</a></li>
+            <li><a href="expiredgoods.php">Expired Goods</a></li>
+            <li><a href="../logout.php">Logout</a></li>
+        </ul>
+    </div>
+    <div class="main-content">
+        <div class="header">
+            <div class="time">
+                <?php echo date('l, F j, Y h:i A'); ?>
+            </div>
+            <div class="notifications">
+            <a href="notifications.php"><i class="fa fa-bell"></i></a>
+            </div>
+        </div>
     <h1>Edit Store</h1>
     <form action="edit_store.php" method="POST">
         <input type="hidden" name="id" value="<?php echo htmlspecialchars($store['id']); ?>">
