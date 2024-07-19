@@ -1,21 +1,20 @@
 <?php
 session_start();
 
-// Check if admin is logged in
+
 if (!isset($_SESSION['username']) || $_SESSION['role'] !== 'admin') {
-    // Redirect to login page if not logged in as admin
+    
     header('Location: ../../index.php');
     exit;
 }
 
-// Include database connection
+
 require_once '../../includes/db.php';
 
-// Fetch procurement data from database (example)
 $sql = "SELECT * FROM purchase_orders ORDER BY order_date DESC";
 $result = $mysqli->query($sql);
 
-// Check if query was successful
+
 if (!$result) {
     $_SESSION['error'] = 'Failed to fetch procurement data.';
     header('Location: index.php'); // Redirect to reports index or handle error
