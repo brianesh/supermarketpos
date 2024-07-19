@@ -1,18 +1,16 @@
 <?php
 session_start();
 
-// Check if admin is logged in
+
 if (!isset($_SESSION['username']) || $_SESSION['role'] !== 'admin') {
-    // Redirect to login page if not logged in as admin
+    
     header('Location: ../../index.php');
     exit;
 }
 
-// Handle form submission
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Process form submission (insert into database, etc.)
 
-    // Redirect to supplier list after adding supplier
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    
     header('Location: index.php');
     exit;
 }

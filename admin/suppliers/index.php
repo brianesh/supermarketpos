@@ -1,14 +1,14 @@
 <?php
 session_start();
 
-// Check if admin is logged in
+
 if (!isset($_SESSION['username']) || $_SESSION['role'] !== 'admin') {
-    // Redirect to login page if not logged in as admin
+   
     header('Location: ../../index.php');
     exit;
 }
 
-// Mock suppliers data (replace with actual database query)
+
 $suppliers = [
     ['id' => 1, 'name' => 'Supplier A', 'email' => 'supplierA@example.com', 'phone' => '123-456-7890'],
     ['id' => 2, 'name' => 'Supplier B', 'email' => 'supplierB@example.com', 'phone' => '987-654-3210'],

@@ -1,4 +1,3 @@
-<!-- index.php -->
 <?php
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
@@ -15,7 +14,7 @@ $result = $mysqli->query($query);
 <head>
     <meta charset="UTF-8">
     <title>Stores Dashboard</title>
-    <!-- Include any necessary CSS stylesheets -->
+    
     <link rel="stylesheet" href="../../css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
@@ -61,8 +60,3 @@ $result = $mysqli->query($query);
         </div>
 </body>
 </html>
-
-<?php
-// Close database connection
-$mysqli->close();
-?>

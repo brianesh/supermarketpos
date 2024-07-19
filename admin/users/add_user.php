@@ -16,10 +16,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_user'])) {
     $password = $_POST['password'];
     $role = $_POST['role'];
 
-    // Hash password before storing (assuming secure hashing method)
+    
     $hashed_password = password_hash($password, PASSWORD_DEFAULT);
 
-    // Insert new user into the database
+    
     $query = "INSERT INTO users (full_name, email, phone, username, password, role) VALUES ('$full_name', '$email', '$phone', '$username', '$hashed_password', '$role')";
 
     if ($mysqli->query($query) === TRUE) {

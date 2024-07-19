@@ -1,22 +1,20 @@
 <?php
 session_start();
 
-// Check if admin is logged in
 if (!isset($_SESSION['username']) || $_SESSION['role'] !== 'admin') {
-    // Redirect to login page if not logged in as admin
+    
     header('Location: ../../index.php');
     exit;
 }
 
-// Example: Get supplier details from database (replace with actual query)
+
 $supplier_id = $_GET['id'] ?? null;
 $supplier = ['id' => $supplier_id, 'name' => 'Supplier X', 'email' => 'supplierX@example.com', 'phone' => '111-222-3333']; // Example data
 
-// Handle form submission
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Process form submission (update in database, etc.)
 
-    // Redirect to supplier list after updating supplier
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    
+
     header('Location: index.php');
     exit;
 }
