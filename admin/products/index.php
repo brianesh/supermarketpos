@@ -6,32 +6,32 @@ $username = "root";
 $password = "password";
 $dbname = "supermarketpos";
 
-// Create connection
+
 $conn = new mysqli($servername, $username, $password, $dbname);
 
-// Check connection
+
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-// Check if admin is logged in
+
 if (!isset($_SESSION['username']) || $_SESSION['role'] !== 'admin') {
-    // Redirect to login page if not logged in as admin
+    
     header('Location: ../../index.php');
     exit;
 }
 
-// Fetch company name from session
+
 $company_name = isset($_SESSION['company_name']) ? $_SESSION['company_name'] : 'Your Company Name';
 
-// SQL query to fetch products
+
 $sql = "SELECT product_id, name, category_name, price, cost, sku, barcode, quantity, description, created_at, updated_at, expiration_date FROM products";
 $result = $conn->query($sql);
 
 $products = [];
 
 if ($result->num_rows > 0) {
-    // Fetching products into an array
+    
     while ($row = $result->fetch_assoc()) {
         $products[] = $row;
     }
@@ -39,7 +39,7 @@ if ($result->num_rows > 0) {
     echo "0 results";
 }
 
-$conn->close(); // Close the database connection
+$conn->close(); 
 ?>
 <!DOCTYPE html>
 <html lang="en">

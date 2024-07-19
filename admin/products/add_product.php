@@ -9,27 +9,26 @@ $username = "root";
 $password = "password";
 $dbname = "supermarketpos";
 
-// Create connection
 $conn = new mysqli($servername, $username, $password, $dbname);
 
-// Check connection
+
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-// Check if admin is logged in
+
 if (!isset($_SESSION['username']) || $_SESSION['role'] !== 'admin') {
-    // Redirect to login page if not logged in as admin
+   
     header('Location: ../../index.php');
     exit;
 }
 
-// Fetch company name from session
+
 $company_name = isset($_SESSION['company_name']) ? $_SESSION['company_name'] : 'Your Company Name';
 
-// Handle form submission
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Example of processing form data
+    
     $name = $_POST['name'];
     $category_name = $_POST['category_name'];
     $price = $_POST['price'];
@@ -40,13 +39,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $description = $_POST['description'];
     $expiration_date = $_POST['expiration_date'];
     
-    // Example of inserting into database with prepared statement
+    
     $stmt = $conn->prepare("INSERT INTO products (name, category_name, price, cost, sku, barcode, quantity, description, expiration_date) 
                             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
     $stmt->bind_param("sssssssss", $name, $category_name, $price, $cost, $sku, $barcode, $quantity, $description, $expiration_date);
     
     if ($stmt->execute()) {
-        // Redirect to product list after adding product
+        
         header('Location: index.php');
         exit;
     } else {
@@ -56,7 +55,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $stmt->close();
 }
 
-$conn->close(); // Close the database connection
+$conn->close(); 
 ?>
 
 

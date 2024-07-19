@@ -6,25 +6,25 @@ $username = "root";
 $password = "password";
 $dbname = "supermarketpos";
 
-// Create connection
+
 $conn = new mysqli($servername, $username, $password, $dbname);
 
-// Check connection
+
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-// Check if admin is logged in
+
 if (!isset($_SESSION['username']) || $_SESSION['role'] !== 'admin') {
-    // Redirect to login page if not logged in as admin
+    
     header('Location: ../../index.php');
     exit;
 }
 
-// Fetch company name from session
+
 $company_name = isset($_SESSION['company_name']) ? $_SESSION['company_name'] : 'Your Company Name';
 
-// Handle edit action
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['edit_product'])) {
     $product_id = $_POST['product_id'];
     $name = $_POST['name'];
@@ -37,7 +37,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['edit_product'])) {
     $description = $_POST['description'];
     $expiration_date = $_POST['expiration_date'];
     
-    // Prepare and bind SQL statement
+  
     $sql = "UPDATE products SET 
             name=?, category_name=?, price=?, cost=?, 
             sku=?, barcode=?, quantity=?, description=?, expiration_date=? 
@@ -47,7 +47,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['edit_product'])) {
     $stmt->bind_param("ssssssssss", $name, $category_name, $price, $cost, $sku, $barcode, $quantity, $description, $expiration_date, $product_id);
     
     if ($stmt->execute()) {
-        // Redirect to product list after editing product
+       
         header('Location: index.php');
         exit;
     } else {
@@ -55,7 +55,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['edit_product'])) {
     }
 }
 
-// Fetch product details for editing
+
 if (isset($_GET['id'])) {
     $product_id = $_GET['id'];
     $sql = "SELECT * FROM products WHERE product_id=?";
@@ -77,7 +77,7 @@ if (isset($_GET['id'])) {
     exit;
 }
 
-$conn->close(); // Close the database connection
+$conn->close(); 
 ?>
 
 
