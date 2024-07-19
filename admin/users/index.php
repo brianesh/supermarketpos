@@ -34,7 +34,7 @@ if (!isset($_SESSION['username']) || $_SESSION['role'] !== 'admin') {
             <li><a href="../products/index.php">Products</a></li>
             <li><a href="barcodescanner.php">Barcode Scanner</a></li>
             <li><a href="../reports/index.php">Reports</a></li>
-            <li><a href="expiredgoods.php">Expired Goods</a></li>
+            <li><a href="../expiredgoods.php">Expired Goods</a></li>
             <li><a href="../logout.php">Logout</a></li>
         </ul>
     </div>
