@@ -47,12 +47,16 @@ if (!isset($_SESSION['username']) || $_SESSION['role'] !== 'admin') {
 
     <main>
         <section>
-        
-            <h2>General Reports</h2>
+            <br><br><br><br><br>
+            <center><h1>General Reports</h1></center><br><br>
             <div class="overview">
                 <div class="card">
                     <h3>SALES REPORTS</h3>
                     <a href="sales_report.php">View Sales</a>
+                </div>
+                <div class="card">
+                    <h3>PROCUREMENT REPORTS</h3>
+                    <a href="procurement_report.php">View Sales</a>
                 </div>
                 </div>
         </section>
