@@ -5,7 +5,6 @@ ini_set('display_errors', 1);
 $mysqli = include('../../includes/db.php');
 require_once('../../includes/functions.php');
 
-// Redirect if user is not logged in or not an admin
 if (!isset($_SESSION['username']) || $_SESSION['role'] !== 'admin') {
     header('Location: ../index.php');
     exit;
@@ -14,13 +13,11 @@ if (!isset($_SESSION['username']) || $_SESSION['role'] !== 'admin') {
 $error = "";
 $success = "";
 
-// Check if category ID is provided
 if (!isset($_GET['category_id'])) {
     $error = "Category ID not provided.";
 } else {
     $category_id = $_GET['category_id'];
 
-    // Delete category from the database
     $query = "DELETE FROM categories WHERE category_id = ?";
     $stmt = $mysqli->prepare($query);
     $stmt->bind_param("i", $category_id);

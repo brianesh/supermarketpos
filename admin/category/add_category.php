@@ -5,7 +5,7 @@ ini_set('display_errors', 1);
 $mysqli = include('../../includes/db.php');
 require_once('../../includes/functions.php');
 
-// Redirect if user is not logged in or not an admin
+
 if (!isset($_SESSION['username']) || $_SESSION['role'] !== 'admin') {
     header('Location: ../index.php');
     exit;
@@ -14,26 +14,26 @@ if (!isset($_SESSION['username']) || $_SESSION['role'] !== 'admin') {
 $error = "";
 $success = "";
 
-// Handle form submission
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_category'])) {
-    // Validate and sanitize inputs
+   
     $name = $_POST['category_name'];
     $description = $_POST['description'];
 
     if (empty($name)) {
         $error = "Category name is required.";
     } else {
-        // Prepare the SQL query using placeholders
+        
         $query = "INSERT INTO categories (category_name, description) VALUES (?, ?)";
         $stmt = $mysqli->prepare($query);
         
-        // Bind parameters to the prepared statement
+        
         $stmt->bind_param("ss", $name, $description);
         
-        // Execute the query
+    
         if ($stmt->execute()) {
             $success = "Category added successfully.";
-            header('Location: index.php'); // Redirect upon successful insertion
+            header('Location: index.php'); 
             exit;
         } else {
             $error = "Failed to add category.";

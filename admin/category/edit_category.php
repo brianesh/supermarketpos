@@ -5,7 +5,7 @@ ini_set('display_errors', 1);
 $mysqli = include('../../includes/db.php');
 require_once('../../includes/functions.php');
 
-// Redirect if user is not logged in or not an admin
+
 if (!isset($_SESSION['username']) || $_SESSION['role'] !== 'admin') {
     header('Location: ../index.php');
     exit;
@@ -14,13 +14,13 @@ if (!isset($_SESSION['username']) || $_SESSION['role'] !== 'admin') {
 $error = "";
 $success = "";
 
-// Check if category ID is provided
+
 if (!isset($_GET['category_id'])) {
     $error = "Category ID not provided.";
 } else {
     $category_id = $_GET['category_id'];
 
-    // Fetch category details from the database
+    
     $query = "SELECT * FROM categories WHERE category_id = ?";
     $stmt = $mysqli->prepare($query);
     $stmt->bind_param("i", $category_id);
@@ -36,26 +36,24 @@ if (!isset($_GET['category_id'])) {
     $stmt->close();
 }
 
-// Handle form submission
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_category'])) {
-    // Validate and sanitize inputs
+   
     $name = $_POST['category_name'];
     $description = $_POST['description'];
 
     if (empty($name)) {
         $error = "Category name is required.";
     } else {
-        // Prepare the SQL query using placeholders
+        
         $query = "UPDATE categories SET category_name = ?, description = ? WHERE category_id = ?";
         $stmt = $mysqli->prepare($query);
         
-        // Bind parameters to the prepared statement
         $stmt->bind_param("ssi", $name, $description, $category_id);
         
-        // Execute the query
+     
         if ($stmt->execute()) {
             $success = "Category updated successfully.";
-            header('Location: index.php'); // Redirect upon successful update
+            header('Location: index.php'); 
             exit;
         } else {
             $error = "Failed to update category.";
