@@ -45,13 +45,13 @@ $mysqli->close();
     <h2>FRESHMART POS</h2>
         <ul>
             <li><a href="../index.php">Dashboard</a></li>
-            <li><a href="stores.php">Stores</a></li>
+            <li><a href="../store/index.php">Stores</a></li>
             <li><a href="index.php">Users</a></li>
-            <li><a href="suppliers/index.php">Suppliers</a></li>
-            <li><a href="category.php">Category</a></li>
+            <li><a href="../suppliers/index.php">Suppliers</a></li>
+            <li><a href="../category/index.php">Category</a></li>
             <li><a href="../products/index.php">Products</a></li>
             <li><a href="barcodescanner.php">Barcode Scanner</a></li>
-            <li><a href="reports/index.php">Reports</a></li>
+            <li><a href="../reports/index.php">Reports</a></li>
             <li><a href="expiredgoods.php">Expired Goods</a></li>
             <li><a href="../logout.php">Logout</a></li>
         </ul>
