@@ -32,7 +32,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['edit_user'])) {
     $username = $_POST['username'];
     $role = $_POST['role'];
 
-    // Update user details in the database
+    
     $query = "UPDATE users SET full_name='$full_name', email='$email', phone='$phone', username='$username', role='$role' WHERE user_id='$user_id'";
 
     if ($mysqli->query($query) === TRUE) {

@@ -11,12 +11,11 @@ if (!isset($_SESSION['username']) || $_SESSION['role'] !== 'admin') {
 if (isset($_GET['id'])) {
     $user_id = $_GET['id'];
     
-    // Check if the user to be deleted is not the admin user
     $query = "SELECT * FROM users WHERE user_id='$user_id' AND role='cashier'";
     $result = $mysqli->query($query);
 
     if ($result->num_rows == 1) {
-        // Delete user from the database
+        
         $delete_query = "DELETE FROM users WHERE user_id='$user_id'";
         
         if ($mysqli->query($delete_query) === TRUE) {

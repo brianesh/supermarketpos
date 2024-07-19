@@ -2,7 +2,7 @@
 session_start();
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
-$mysqli = include('../../includes/db.php'); // Adjust based on the actual relative path
+$mysqli = include('../../includes/db.php'); 
 require_once('../../includes/functions.php');
 
 if (!isset($_SESSION['username']) || $_SESSION['role'] !== 'admin') {
