@@ -27,6 +27,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <link rel="stylesheet" href="../../css/style.css">
 </head>
 <body>
+    
     <h1>Add New Store</h1>
     <form action="add_store.php" method="POST">
         <label for="company_name">Company Name:</label>

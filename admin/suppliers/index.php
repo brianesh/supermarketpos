@@ -48,16 +48,28 @@ $result = $mysqli->query($query);
     <table>
     <h1>Suppliers Dashboard</h1>
     <a href="add_supplier.php">Add New Supplier</a><br><br>
+        <tr>
+            <th>Supplier ID</th>
+            <th>Supplier Name</th>
+            <th>Phone Number</th>
+            <th>Email Address</th>
+            <th>Location</th>
+            <th>Product Name</th>
+            <th>Action</th>
+        </tr>
         <?php while ($row = $result->fetch_assoc()): ?>
-        <?php echo htmlspecialchars($row['supplier_id']); ?>
-        <?php echo htmlspecialchars($row['name']); ?>
-        <?php echo htmlspecialchars($row['contact_name']); ?>
-        <?php echo htmlspecialchars($row['phone_number']); ?>
-        <?php echo htmlspecialchars($row['email']); ?>
-        <?php echo htmlspecialchars($row['address']); ?>
-        <?php echo htmlspecialchars($row['product_name']); ?>
-        <a href="edit_supplier.php?id=<?php echo $row['id']; ?>">Edit</a>
-        <a href="delete_supplier.php?id=<?php echo $row['id']; ?>">Delete</a>
+            <tr>
+        <td><?php echo htmlspecialchars($row['supplier_id']); ?></td>
+        <td><?php echo htmlspecialchars($row['name']); ?></td>
+        <td><?php echo htmlspecialchars($row['phone_number']); ?></td>
+        <td><?php echo htmlspecialchars($row['email']); ?></td>
+        <td><?php echo htmlspecialchars($row['address']); ?></td>
+        <td><?php echo htmlspecialchars($row['product_name']); ?></td>
+        <td>
+        <a href="edit_supplier.php?id=<?php echo $row['supplier_id']; ?>">Edit</a>
+        <a href="delete_supplier.php?id=<?php echo $row['supplier_id']; ?>">Delete</a>
+        </td>
+        </tr>
         <?php endwhile; ?>
         </table>
         </div>

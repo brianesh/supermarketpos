@@ -89,16 +89,33 @@ $conn->close();
     <link rel="stylesheet" href="../../css/style.css">
 </head>
 <body>
-    <header>
-        <h1>Edit Product</h1>
-        <nav>
-            <ul>
-                <li><a href="index.php">Product List</a></li>
-                <li><a href="../../admin/index.php">Admin Dashboard</a></li>
-                <li><a href="../../admin/logout.php">Logout</a></li>
-            </ul>
-        </nav>
-    </header>
+
+<div class="sidebar">
+<div class="profile-image">
+        <h1><img src="../../uploads/logosmaller.png" alt="Profile Image">FRESHMART</h1>
+    </div>
+        <ul>
+            <li><a href="../index.php">Dashboard</a></li>
+            <li><a href="stores.php">Stores</a></li>
+            <li><a href="">Users</a></li>
+            <li><a href="suppliers/index.php">Suppliers</a></li>
+            <li><a href="category.php">Category</a></li>
+            <li><a href="../products/index.php">Products</a></li>
+            <li><a href="barcodescanner.php">Barcode Scanner</a></li>
+            <li><a href="reports/index.php">Reports</a></li>
+            <li><a href="expiredgoods.php">Expired Goods</a></li>
+            <li><a href="../logout.php">Logout</a></li>
+</ul>
+    </div>
+    <div class="main-content">
+        <div class="header">
+            <div class="time">
+                <?php echo date('l, F j, Y h:i A'); ?>
+            </div>
+            <div class="notifications">
+            <a href="notifications.php"><i class="fa fa-bell"></i></a>
+            </div>
+        </div>
 
     <main>
         <section>
