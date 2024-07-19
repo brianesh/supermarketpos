@@ -66,14 +66,14 @@ $conn->close();
     </div>
 </body>
 <script>
-        // Function to delay animation start
+       
         function startAnimation() {
             setTimeout(function() {
                 document.getElementById('welcome-text').classList.add('start');
-            }, 500); // Delay before animation starts (milliseconds)
+            }, 500); 
         }
 
-        // Start animation on page load
+       
         window.onload = function() {
             startAnimation();
         };

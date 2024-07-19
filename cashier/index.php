@@ -5,13 +5,12 @@ ini_set('display_errors', 1);
 $mysqli = include('../includes/db.php');
 require_once('../includes/functions.php');
 
-// Check if the user is logged in and has the role of cashier
 if (!isset($_SESSION['username']) || $_SESSION['role'] !== 'cashier') {
     header('Location: ../index.php');
     exit;
 }
 
-// Check if the user_id is set in the session
+
 if (!isset($_SESSION['user_id'])) {
     die('User ID is not set in the session.');
 }

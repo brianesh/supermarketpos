@@ -5,13 +5,12 @@ ini_set('display_errors', 1);
 $mysqli = include('../includes/db.php');
 require_once('../includes/functions.php');
 
-// Redirect if user is not logged in or not an admin
+
 if (!isset($_SESSION['username']) || $_SESSION['role'] !== 'cashier') {
     header('Location: ../index.php');
     exit;
 }
 
-// Fetch categories from the database
 $query = "SELECT * FROM categories";
 $result = $mysqli->query($query);
 $categories = $result->fetch_all(MYSQLI_ASSOC);
