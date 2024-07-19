@@ -44,7 +44,7 @@ $getYearsSales = getYearsSales($cashier_id);
             <li><a href="category.php">Category</a></li>
             <li><a href="products.php">Products</a></li>
             <li><a href="pos.php">POS</a></li>
-            <li><a href="expiredgoods.php">Expired Goods</a></li>
+            <li><a href="expired_goods.php">Expired Goods</a></li>
             <li><a href="logout.php">Logout</a></li>
         </ul>
     </div>
