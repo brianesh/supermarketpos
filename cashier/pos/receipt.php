@@ -9,7 +9,7 @@ require_once('../../includes/functions.php');
 
 // Redirect if sale_id is not provided or not valid
 if (!isset($_GET['sale_id']) || !is_numeric($_GET['sale_id'])) {
-    header('Location: index.php'); // Adjust this redirection to your actual POS page
+    header('Location: receipt.php'); // Adjust this redirection to your actual POS page
     exit;
 }
 
@@ -25,12 +25,13 @@ $result = $stmt->get_result();
 if ($result->num_rows > 0) {
     $sale = $result->fetch_assoc();
 
+    
     // Fetch sale items from the database using prepared statement
-    $queryItems = "SELECT * FROM sale_items WHERE sale_id = ?";
-    $stmtItems = $mysqli->prepare($queryItems);
-    $stmtItems->bind_param('i', $saleId); // Assuming sale_id is an integer type
-    $stmtItems->execute();
-    $resultItems = $stmtItems->get_result();
+$queryItems = "SELECT * FROM sale_details WHERE sale_id = ?";
+$stmtItems = $mysqli->prepare($queryItems);
+$stmtItems->bind_param('i', $saleId); // Assuming sale_id is an integer type
+$stmtItems->execute();
+$resultItems = $stmtItems->get_result();
 
     $items = [];
     while ($row = $resultItems->fetch_assoc()) {

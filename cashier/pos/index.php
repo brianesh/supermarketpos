@@ -161,39 +161,24 @@ $mysqli->close();
                     }
 
                     $.post('process_sale.php', {
-                        paymentMethod: paymentMethod,
-                        saleItems: saleItems,
+                        paymentMethod: method_name,
+                        saleItems: sale_details,
                         cashReceived: cashReceived
                     }, function(response) {
                         if (response.success) {
                             const balance = response.balance || 0;
                             alert(`Sale completed successfully. Balance to give: $${balance.toFixed(2)}`);
-setTimeout(() => {
-    window.location.href = `receipt.php?sale_id=${response.sale_id}`;
-}, 100);
-
+                            window.location.href = `receipt.php?sale_id=${response.sale_id}`;
                         } else {
                             alert('Sale failed. Please try again.');
                         }
                     }, 'json');
                 } 
-                else if (paymentMethod === 'mpesa') {
-            $.post('process_sale.php', {
-                paymentMethod: paymentMethod,
-                saleItems: saleItems
-            }, function(response) {
-                if (response.success) {
-                    console.log(`Redirecting to Mpesa payment URL`);
-                    window.location.href = 'https://sandbox.safaricom.co.ke/mpesa/stkpush/v1/processrequest';
-                } else {
-                    alert('Sale failed. Please try again.');
-                }
-            }, 'json');
-        } 
+                
                 else {
                     $.post('process_sale.php', {
-                        paymentMethod: paymentMethod,
-                        saleItems: saleItems
+                        paymentMethod: method_name,
+                        saleItems: sale_details
                     }, function(response) {
                         if (response.success) {
                             console.log(`Redirecting to receipt.php?sale_id=${response.sale_id}`);
