@@ -34,7 +34,7 @@ $mysqli->close();
             <li><a href="index.php">Dashboard</a></li>
             <li><a href="">Category</a></li>
             <li><a href="products.php">Products</a></li>
-            <li><a href="pos.php">POS</a></li>
+            <li><a href="pos/index.php">POS</a></li>
             <li><a href="expired_goods.php">Expired Goods</a></li>
             <li><a href="logout.php">Logout</a></li>
         </ul>
