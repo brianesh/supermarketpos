@@ -161,8 +161,8 @@ $mysqli->close();
                     }
 
                     $.post('process_sale.php', {
-                        paymentMethod: method_name,
-                        saleItems: sale_details,
+                        paymentMethod: paymentMethod,
+                        saleItems: saleItems,
                         cashReceived: cashReceived
                     }, function(response) {
                         if (response.success) {
@@ -173,12 +173,10 @@ $mysqli->close();
                             alert('Sale failed. Please try again.');
                         }
                     }, 'json');
-                } 
-                
-                else {
+                } else {
                     $.post('process_sale.php', {
-                        paymentMethod: method_name,
-                        saleItems: sale_details
+                        paymentMethod: paymentMethod,
+                        saleItems: saleItems
                     }, function(response) {
                         if (response.success) {
                             console.log(`Redirecting to receipt.php?sale_id=${response.sale_id}`);
@@ -189,7 +187,6 @@ $mysqli->close();
                     }, 'json');
                 }
             });
-
             function updateGrandTotal(amount) {
                 grandTotal += amount;
                 $('#grand-total').text(`$${grandTotal.toFixed(2)}`);
