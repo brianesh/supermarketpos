@@ -80,7 +80,7 @@ $mysqli->close();
                 <tfoot>
                     <tr>
                         <td colspan="4">Grand Total:</td>
-                        <td colspan="2" id="grand-total">$0.00</td>
+                        <td colspan="2" id="grand-total">Ksh 0.00</td>
                     </tr>
                 </tfoot>
             </table>
@@ -107,9 +107,9 @@ $mysqli->close();
                         <tr data-item="${itemCount}">
                             <td>${itemCount}</td>
                             <td>${product.name}</td>
-                            <td>$${unitPrice}</td>
+                            <td>Ksh ${unitPrice}</td>
                             <td><input type="number" value="${quantity}" min="1" class="quantity" data-price="${unitPrice}"></td>
-                            <td class="subtotal">$${subtotal.toFixed(2)}</td>
+                            <td class="subtotal">Ksh ${subtotal.toFixed(2)}</td>
                             <td><button class="delete-item" data-item="${itemCount}">Delete</button></td>
                         </tr>
                     `);
@@ -125,15 +125,15 @@ $mysqli->close();
                 const price = $(this).data('price');
                 const itemRow = $(this).closest('tr');
                 const subtotal = quantity * price;
-                const prevSubtotal = parseFloat(itemRow.find('.subtotal').text().replace('$', ''));
+                const prevSubtotal = parseFloat(itemRow.find('.subtotal').text().replace('Ksh', ''));
 
-                itemRow.find('.subtotal').text(`$${subtotal.toFixed(2)}`);
+                itemRow.find('.subtotal').text(`Ksh ${subtotal.toFixed(2)}`);
                 updateGrandTotal(subtotal - prevSubtotal);
             });
 
             $(document).on('click', '.delete-item', function() {
                 const itemRow = $(this).closest('tr');
-                const subtotal = parseFloat(itemRow.find('.subtotal').text().replace('$', ''));
+                const subtotal = parseFloat(itemRow.find('.subtotal').text().replace('Ksh', ''));
                 updateGrandTotal(-subtotal);
                 itemRow.remove();
             });
@@ -145,9 +145,9 @@ $mysqli->close();
                 $('#sale-table tbody tr').each(function() {
                     const itemRow = $(this);
                     const productName = itemRow.find('td:nth-child(2)').text();
-                    const unitPrice = parseFloat(itemRow.find('td:nth-child(3)').text().replace('$', ''));
+                    const unitPrice = parseFloat(itemRow.find('td:nth-child(3)').text().replace('Ksh', ''));
                     const quantity = parseInt(itemRow.find('.quantity').val());
-                    const subtotal = parseFloat(itemRow.find('.subtotal').text().replace('$', ''));
+                    const subtotal = parseFloat(itemRow.find('.subtotal').text().replace('Ksh', ''));
 
                     saleItems.push({ productName, unitPrice, quantity, subtotal });
                 });
@@ -167,7 +167,7 @@ $mysqli->close();
                     }, function(response) {
                         if (response.success) {
                             const balance = response.balance || 0;
-                            alert(`Sale completed successfully. Balance to give: $${balance.toFixed(2)}`);
+                            alert(`Sale completed successfully. Balance to give: Ksh ${balance.toFixed(2)}`);
                             window.location.href = `receipt.php?sale_id=${response.sale_id}`;
                         } else {
                             alert('Sale failed. Please try again.');
@@ -189,7 +189,7 @@ $mysqli->close();
             });
             function updateGrandTotal(amount) {
                 grandTotal += amount;
-                $('#grand-total').text(`$${grandTotal.toFixed(2)}`);
+                $('#grand-total').text(`Ksh ${grandTotal.toFixed(2)}`);
             }
         });
     </script>
