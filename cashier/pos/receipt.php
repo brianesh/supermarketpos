@@ -3,6 +3,10 @@ session_start();
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
+require 'vendor/autoload.php'; // Include Composer autoload
+use Endroid\QrCode\QrCode;
+use Endroid\QrCode\Writer\PngWriter;
+
 // Include database connection and functions
 $mysqli = include('../../includes/db.php'); // Assuming db.php returns $mysqli
 require_once('../../includes/functions.php');
@@ -25,13 +29,12 @@ $result = $stmt->get_result();
 if ($result->num_rows > 0) {
     $sale = $result->fetch_assoc();
 
-    
     // Fetch sale items from the database using prepared statement
-$queryItems = "SELECT * FROM sale_details WHERE sale_id = ?";
-$stmtItems = $mysqli->prepare($queryItems);
-$stmtItems->bind_param('i', $saleId); // Assuming sale_id is an integer type
-$stmtItems->execute();
-$resultItems = $stmtItems->get_result();
+    $queryItems = "SELECT * FROM sale_details WHERE sale_id = ?";
+    $stmtItems = $mysqli->prepare($queryItems);
+    $stmtItems->bind_param('i', $saleId); // Assuming sale_id is an integer type
+    $stmtItems->execute();
+    $resultItems = $stmtItems->get_result();
 
     $items = [];
     while ($row = $resultItems->fetch_assoc()) {
@@ -45,6 +48,29 @@ $resultItems = $stmtItems->get_result();
 }
 
 $method_name = $sale['method_name'];
+
+// Generate QR Code
+$qrCodeData = "Receipt Number: " . $saleId . "\nDate: " . date('Y-m-d H:i:s', strtotime($sale['created_at'])) . "\nAmount: " . number_format($sale['total_amount'], 2);
+$qrCode = new QrCode($qrCodeData);
+$qrCode->setSize(150);
+$qrCode->setMargin(10);
+
+// Directory to save QR code
+$directory = __DIR__ . '/qrcodes/';
+
+// Check if directory exists
+if (!is_dir($directory)) {
+    // Try to create the directory
+    if (!mkdir($directory, 0777, true)) {
+        die('Failed to create directory: ' . $directory);
+    }
+}
+
+// Use PngWriter to save the QR code as a PNG file
+$writer = new PngWriter();
+$qrCodeFilePath = $directory . 'receipt_' . $saleId . '.png';
+$result = $writer->write($qrCode);
+file_put_contents($qrCodeFilePath, $result->getString()); // Save the QR code to a file
 
 $stmt->close(); // Close the statement after fetching sale details
 $mysqli->close(); // Close the database connection
@@ -87,6 +113,9 @@ $mysqli->close(); // Close the database connection
             margin-top: 20px;
             font-weight: bold;
         }
+        .qr-code {
+            margin-top: 20px;
+        }
     </style>
 </head>
 <body>
@@ -94,12 +123,12 @@ $mysqli->close(); // Close the database connection
         <div class="receipt-header">
             <h2>FRESHMART SUPERMARKET</h2>
             <p>Date: <?php echo date('Y-m-d H:i:s', strtotime($sale['created_at'])); ?></p>
-        <h3>00232 RUIRU</h3>
-        <h3>Tel: 0758489080</h3>
-        <h3>freshmart@gmail.com</h3>
+            <h3>00232 RUIRU</h3>
+            <h3>Tel: 0758489080</h3>
+            <h3>freshmart@gmail.com</h3>
         </div>
         <div class="receipt-items">
-            <center><h2>SALE RECEIPT</h2><center>
+            <center><h2>SALE RECEIPT</h2></center>
             <table>
                 <thead>
                     <tr>
@@ -124,8 +153,12 @@ $mysqli->close(); // Close the database connection
         <div class="receipt-total">
             <p>Grand Total: Ksh<?php echo number_format($sale['total_amount'], 2); ?></p>
         </div>
-        <h4></h4>
-            <h4>Paid Via: <?php echo htmlspecialchars($method_name); ?></h4>
+        <h4>Paid Via: <?php echo htmlspecialchars($method_name); ?></h4>
+        <h4>Served by: <?php echo htmlspecialchars($user.$full_name); ?></h4>
+
+        <div class="qr-code">
+        <img src="qrcodes/receipt_<?php echo $saleId; ?>.png" alt="QR Code" />
+        </div>
     </div>
 </body>
 </html>
