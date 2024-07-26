@@ -41,14 +41,15 @@ $mysqli->close();
             <li><a href="../index.php">Dashboard</a></li>
             <li><a href="../category.php">Category</a></li>
             <li><a href="../products.php">Products</a></li>
-            <li><a href="pos.php">POS</a></li>
-            <li><a href="../expiredgoods.php">Expired Goods</a></li>
+            <li><a href="">POS</a></li>
+            <li><a href="../expired_goods.php">Expired Goods</a></li>
             <li><a href="../logout.php">Logout</a></li>
         </ul>
     </div>
     <div class="main-content">
         <div class="header">
             <div class="time">
+                <?php date_default_timezone_set('Africa/Nairobi');?>
                 <?php echo date('l, F j, Y h:i A'); ?>
             </div>
             <div class="notifications">

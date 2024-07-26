@@ -20,9 +20,14 @@ if (!isset($_GET['sale_id']) || !is_numeric($_GET['sale_id'])) {
 $saleId = $_GET['sale_id'];
 
 // Fetch sale details from the database using prepared statement
-$query = "SELECT * FROM sales WHERE sale_id = ?";
+$query = "
+    SELECT s.*, u.full_name
+    FROM sales s
+    JOIN users u ON s.user_id = u.user_id
+    WHERE s.sale_id = ?
+";
 $stmt = $mysqli->prepare($query);
-$stmt->bind_param('i', $saleId); // Assuming sale_id is an integer type (adjust if it's not)
+$stmt->bind_param('i', $saleId); // Assuming sale_id is an integer type
 $stmt->execute();
 $result = $stmt->get_result();
 
@@ -48,6 +53,7 @@ if ($result->num_rows > 0) {
 }
 
 $method_name = $sale['method_name'];
+$served_by = $sale['full_name'] ?? 'Unknown'; // Provide a default value if full_name is null
 
 // Generate QR Code
 $qrCodeData = "Receipt Number: " . $saleId . "\nDate: " . date('Y-m-d H:i:s', strtotime($sale['created_at'])) . "\nAmount: " . number_format($sale['total_amount'], 2);
@@ -154,10 +160,9 @@ $mysqli->close(); // Close the database connection
             <p>Grand Total: Ksh<?php echo number_format($sale['total_amount'], 2); ?></p>
         </div>
         <h4>Paid Via: <?php echo htmlspecialchars($method_name); ?></h4>
-        <h4>Served by: <?php echo htmlspecialchars($user.$full_name); ?></h4>
-
+        <h4>Served By: <?php echo htmlspecialchars($served_by); ?></h4>
         <div class="qr-code">
-        <img src="qrcodes/receipt_<?php echo $saleId; ?>.png" alt="QR Code" />
+            <img src="qrcodes/receipt_<?php echo $saleId; ?>.png" alt="QR Code" />
         </div>
     </div>
 </body>

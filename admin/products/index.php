@@ -70,6 +70,7 @@ $conn->close();
     <div class="main-content">
         <div class="header">
             <div class="time">
+            <?php date_default_timezone_set('Africa/Nairobi');?>
                 <?php echo date('l, F j, Y h:i A'); ?>
             </div>
             <div class="notifications">
@@ -102,8 +103,8 @@ $conn->close();
                     <td><?php echo $product['product_id']; ?></td>
                     <td><?php echo $product['name']; ?></td>
                     <td><?php echo $product['category_name']; ?></td>
-                    <td>$<?php echo number_format($product['price'], 2); ?></td>
-                    <td>$<?php echo number_format($product['cost'], 2); ?></td>
+                    <td>Ksh <?php echo number_format($product['price'], 2); ?></td>
+                    <td>Ksh <?php echo number_format($product['cost'], 2); ?></td>
                     <td><?php echo $product['sku']; ?></td>
                     <td><?php echo $product['barcode']; ?></td>
                     <td><?php echo $product['quantity']; ?></td>
