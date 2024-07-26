@@ -44,6 +44,8 @@ $resultItems = $stmtItems->get_result();
     exit;
 }
 
+$method_name = $sale['method_name'];
+
 $stmt->close(); // Close the statement after fetching sale details
 $mysqli->close(); // Close the database connection
 
@@ -90,34 +92,40 @@ $mysqli->close(); // Close the database connection
 <body>
     <div class="receipt-container">
         <div class="receipt-header">
-            <h2>Receipt - FRESHMART POS</h2>
+            <h2>FRESHMART SUPERMARKET</h2>
             <p>Date: <?php echo date('Y-m-d H:i:s', strtotime($sale['created_at'])); ?></p>
+        <h3>00232 RUIRU</h3>
+        <h3>Tel: 0758489080</h3>
+        <h3>freshmart@gmail.com</h3>
         </div>
         <div class="receipt-items">
+            <center><h2>SALE RECEIPT</h2><center>
             <table>
                 <thead>
                     <tr>
                         <th>Item</th>
                         <th>Unit Price</th>
-                        <th>Quantity</th>
+                        <th>Qty</th>
                         <th>Subtotal</th>
                     </tr>
                 </thead>
                 <tbody>
                     <?php foreach ($items as $item): ?>
                         <tr>
-                            <td><?php echo htmlspecialchars($item['name']); ?></td>
-                            <td>$<?php echo number_format($item['price'], 2); ?></td>
+                            <td><?php echo htmlspecialchars($item['productName']); ?></td>
+                            <td>Ksh<?php echo number_format($item['price'], 2); ?></td>
                             <td><?php echo $item['quantity']; ?></td>
-                            <td>$<?php echo number_format($item['subtotal'], 2); ?></td>
+                            <td>Ksh<?php echo number_format($item['subtotal'], 2); ?></td>
                         </tr>
                     <?php endforeach; ?>
                 </tbody>
             </table>
         </div>
         <div class="receipt-total">
-            <p>Grand Total: $<?php echo number_format($sale['total_amount'], 2); ?></p>
+            <p>Grand Total: Ksh<?php echo number_format($sale['total_amount'], 2); ?></p>
         </div>
+        <h4></h4>
+            <h4>Paid Via: <?php echo htmlspecialchars($method_name); ?></h4>
     </div>
 </body>
 </html>
