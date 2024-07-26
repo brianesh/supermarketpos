@@ -94,6 +94,7 @@ $mysqli->close();
     <div class="main-content">
         <div class="header">
             <div class="time">
+            <?php date_default_timezone_set('Africa/Nairobi');?>
                 <?php echo date('l, F j, Y h:i A'); ?>
             </div>
             <div class="notifications">
