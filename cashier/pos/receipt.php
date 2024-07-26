@@ -9,7 +9,7 @@ require_once('../../includes/functions.php');
 
 // Redirect if sale_id is not provided or not valid
 if (!isset($_GET['sale_id']) || !is_numeric($_GET['sale_id'])) {
-    header('Location: receipt.php'); // Adjust this redirection to your actual POS page
+    header('Location: index.php'); // Adjust this redirection to your actual POS page
     exit;
 }
 
@@ -106,8 +106,8 @@ $mysqli->close(); // Close the database connection
                 <tbody>
                     <?php foreach ($items as $item): ?>
                         <tr>
-                            <td><?php echo htmlspecialchars($item['product_name']); ?></td>
-                            <td>$<?php echo number_format($item['unit_price'], 2); ?></td>
+                            <td><?php echo htmlspecialchars($item['name']); ?></td>
+                            <td>$<?php echo number_format($item['price'], 2); ?></td>
                             <td><?php echo $item['quantity']; ?></td>
                             <td>$<?php echo number_format($item['subtotal'], 2); ?></td>
                         </tr>

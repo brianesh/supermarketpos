@@ -2,7 +2,7 @@
 session_start();
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
-require_once('../../includes/db.php'); // Assuming db.php returns $mysqli
+require_once('../../includes/db.php'); // Ensure this returns $mysqli
 
 // Redirect if user is not logged in or not authorized
 if (!isset($_SESSION['username']) || ($_SESSION['role'] !== 'cashier' && $_SESSION['role'] !== 'admin')) {
@@ -13,7 +13,13 @@ if (!isset($_SESSION['username']) || ($_SESSION['role'] !== 'cashier' && $_SESSI
 // Fetch products from the database
 $query = "SELECT product_id, name, price FROM products";
 $result = $mysqli->query($query);
-$products = $result->fetch_all(MYSQLI_ASSOC);
+
+if ($result) {
+    $products = $result->fetch_all(MYSQLI_ASSOC);
+} else {
+    echo "Database query failed: " . $mysqli->error;
+    $products = [];
+}
 
 $mysqli->close();
 ?>
@@ -35,7 +41,7 @@ $mysqli->close();
             <li><a href="../index.php">Dashboard</a></li>
             <li><a href="../category.php">Category</a></li>
             <li><a href="../products.php">Products</a></li>
-            <li><a href="">POS</a></li>
+            <li><a href="pos.php">POS</a></li>
             <li><a href="../expiredgoods.php">Expired Goods</a></li>
             <li><a href="../logout.php">Logout</a></li>
         </ul>
@@ -88,122 +94,115 @@ $mysqli->close();
         </section>
     </div>
     <script>
-    $(document).ready(function() {
-        const products = <?php echo json_encode($products); ?>;
-        let itemCount = 0;
-        let grandTotal = 0;
+$(document).ready(function() {
+    const products = <?php echo json_encode($products); ?>;
+    let itemCount = 0;
+    let grandTotal = 0;
 
-        $('#add-product').click(function() {
-            const productName = $('#product-search').val();
-            const product = products.find(p => p.name.toLowerCase() === productName.toLowerCase());
+    $('#add-product').click(function() {
+        const productName = $('#product-search').val().trim();
+        const product = products.find(p => p.name.toLowerCase() === productName.toLowerCase());
 
-            if (product) {
-                itemCount++;
-                const unitPrice = parseFloat(product.price).toFixed(2);
-                const quantity = 1;
-                const subtotal = unitPrice * quantity;
+        if (product) {
+            itemCount++;
+            const unitPrice = parseFloat(product.price).toFixed(2);
+            const quantity = 1;
+            const subtotal = unitPrice * quantity;
 
-                $('#sale-table tbody').append(`
-                    <tr data-item="${itemCount}">
-                        <td>${itemCount}</td>
-                        <td>${product.name}</td>
-                        <td>Ksh ${unitPrice}</td>
-                        <td><input type="number" value="${quantity}" min="1" class="quantity" data-price="${unitPrice}"></td>
-                        <td class="subtotal">Ksh ${subtotal.toFixed(2)}</td>
-                        <td><button class="delete-item" data-item="${itemCount}">Delete</button></td>
-                    </tr>
-                `);
+            $('#sale-table tbody').append(`
+                <tr data-item="${itemCount}">
+                    <td>${itemCount}</td>
+                    <td>${product.name}</td>
+                    <td>Ksh ${unitPrice}</td>
+                    <td><input type="number" value="${quantity}" min="1" class="quantity" data-price="${unitPrice}"></td>
+                    <td class="subtotal">Ksh ${subtotal.toFixed(2)}</td>
+                    <td><button class="delete-item" data-item="${itemCount}">Delete</button></td>
+                </tr>
+            `);
 
-                updateGrandTotal(subtotal);
-            } else {
-                alert('Product not found');
-            }
-        });
-
-        $(document).on('input', '.quantity', function() {
-            const quantity = $(this).val();
-            const price = $(this).data('price');
-            const itemRow = $(this).closest('tr');
-            const subtotal = quantity * price;
-            const prevSubtotal = parseFloat(itemRow.find('.subtotal').text().replace('Ksh', ''));
-
-            itemRow.find('.subtotal').text(`Ksh ${subtotal.toFixed(2)}`);
-            updateGrandTotal(subtotal - prevSubtotal);
-        });
-
-        $(document).on('click', '.delete-item', function() {
-            const itemRow = $(this).closest('tr');
-            const subtotal = parseFloat(itemRow.find('.subtotal').text().replace('Ksh', ''));
-            updateGrandTotal(-subtotal);
-            itemRow.remove();
-        });
-
-        $('#make-sale').click(function() {
-            const paymentMethod = $('#payment-method').val();
-            const saleItems = [];
-
-            $('#sale-table tbody tr').each(function() {
-                const itemRow = $(this);
-                const productName = itemRow.find('td:nth-child(2)').text();
-                const unitPrice = parseFloat(itemRow.find('td:nth-child(3)').text().replace('Ksh', ''));
-                const quantity = parseInt(itemRow.find('.quantity').val());
-                const subtotal = parseFloat(itemRow.find('.subtotal').text().replace('Ksh', ''));
-
-                saleItems.push({ productName, unitPrice, quantity, subtotal });
-            });
-
-            // Additional handling for cash payment
-            if (paymentMethod === 'cash') {
-                const cashReceived = parseFloat(prompt('Enter cash received:'));
-                if (isNaN(cashReceived) || cashReceived < grandTotal) {
-                    alert('Invalid amount. Please enter sufficient cash.');
-                    return;
-                }
-
-                $.post('process_sale.php', {
-                    method_name: paymentMethod,
-                    sale_details: saleItems,
-                    cashReceived: cashReceived
-                }, function(response) {
-                    console.log(response); // Log the entire response object
-                    if (response.success) {
-                        const balance = response.balance || 0;
-                        alert(`Sale completed successfully. Balance to give: Ksh ${balance.toFixed(2)}`);
-                        window.location.href = `receipt.php?sale_id=${response.sale_id}`;
-                    } else {
-                        alert('Sale failed. Please try again.');
-                    }
-                }, 'json').fail(function(xhr, status, error) {
-                    console.error('Error:', status, error); // Log the error
-                    console.log(xhr.responseText); // Log the server response
-                    alert('Sale failed. Please try again.');
-                });
-            } else {
-                $.post('process_sale.php', {
-                    method_name: paymentMethod,
-                    sale_details: saleItems
-                }, function(response) {
-                    console.log(response); // Log the entire response object
-                    if (response.success) {
-                        console.log(`Redirecting to receipt.php?sale_id=${response.sale_id}`);
-                        window.location.href = `receipt.php?sale_id=${response.sale_id}`;
-                    } else {
-                        alert('Sale failed. Please try again.');
-                    }
-                }, 'json').fail(function(xhr, status, error) {
-                    console.error('Error:', status, error); // Log the error
-                    console.log(xhr.responseText); // Log the server response
-                    alert('Sale failed. Please try again.');
-                });
-            }
-        });
-
-        function updateGrandTotal(amount) {
-            grandTotal += amount;
-            $('#grand-total').text(`Ksh ${grandTotal.toFixed(2)}`);
+            updateGrandTotal(subtotal);
+        } else {
+            alert('Product not found');
         }
     });
-    </script>
+
+    $(document).on('input', '.quantity', function() {
+        const quantity = $(this).val();
+        const price = $(this).data('price');
+        const itemRow = $(this).closest('tr');
+        const subtotal = quantity * price;
+        const prevSubtotal = parseFloat(itemRow.find('.subtotal').text().replace('Ksh ', '').replace(',', ''));
+
+        itemRow.find('.subtotal').text(`Ksh ${subtotal.toFixed(2)}`);
+        updateGrandTotal(subtotal - prevSubtotal);
+    });
+
+    $(document).on('click', '.delete-item', function() {
+        const itemRow = $(this).closest('tr');
+        const subtotal = parseFloat(itemRow.find('.subtotal').text().replace('Ksh ', '').replace(',', ''));
+        updateGrandTotal(-subtotal);
+        itemRow.remove();
+    });
+
+    $('#make-sale').click(function() {
+        const paymentMethod = $('#payment-method').val();
+        const saleItems = [];
+
+        $('#sale-table tbody tr').each(function() {
+            const itemRow = $(this);
+            const productName = itemRow.find('td:nth-child(2)').text();
+            const unitPrice = parseFloat(itemRow.find('td:nth-child(3)').text().replace('Ksh ', '').replace(',', ''));
+            const quantity = parseInt(itemRow.find('.quantity').val());
+            const subtotal = parseFloat(itemRow.find('.subtotal').text().replace('Ksh ', '').replace(',', ''));
+
+            saleItems.push({ productName, unitPrice, quantity, subtotal });
+        });
+
+        // Validate sale items and grand total
+        if (saleItems.length === 0) {
+            alert('No items in the sale.');
+            return;
+        }
+
+        // Process sale based on payment method
+        const requestData = {
+            method_name: paymentMethod,
+            sale_details: saleItems,
+        };
+
+        if (paymentMethod === 'cash') {
+            const cashReceived = parseFloat(prompt('Enter cash received:'));
+            if (isNaN(cashReceived) || cashReceived < grandTotal) {
+                alert('Invalid amount. Please enter sufficient cash.');
+                return;
+            }
+            requestData.cashReceived = cashReceived;
+        }
+
+        $.post('process_sale.php', requestData, function(response) {
+            if (response.success) {
+                if (paymentMethod === 'cash') {
+                    const balance = response.balance || 0;
+                    alert(`Sale completed successfully. Balance to give: Ksh ${balance.toFixed(2)}`);
+                } else {
+                    alert('Sale completed successfully.');
+                }
+                window.location.href = `receipt.php?sale_id=${response.sale_id}`;
+            } else {
+                alert('Sale failed. Please try again.');
+            }
+        }, 'json').fail(function(xhr, status, error) {
+            console.error('Error:', status, error);
+            alert('Sale failed. Please try again.');
+        });
+    });
+
+    function updateGrandTotal(amount) {
+        grandTotal += amount;
+        $('#grand-total').text(`Ksh ${grandTotal.toFixed(2)}`);
+    }
+});
+
+</script>
 </body>
 </html>
-

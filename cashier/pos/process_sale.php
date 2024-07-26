@@ -3,7 +3,7 @@ session_start();
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
-$mysqli = include('../../includes/db.php');
+require_once('../../includes/db.php'); // Ensure this returns $mysqli
 
 // Validate session and user role
 if (!isset($_SESSION['username']) || ($_SESSION['role'] !== 'cashier' && $_SESSION['role'] !== 'admin')) {
@@ -25,7 +25,11 @@ if (empty($saleItems)) {
 // Calculate total amount of the sale
 $totalAmount = 0;
 foreach ($saleItems as $item) {
-    $totalAmount += $item['subtotal'];
+    if (!isset($item['subtotal'])) {
+        echo json_encode(['success' => false, 'message' => 'Subtotal missing for an item']);
+        exit;
+    }
+    $totalAmount += floatval($item['subtotal']); // Ensure subtotal is a float
 }
 
 // Insert sale into sales table
@@ -44,34 +48,25 @@ $saleId = $stmt->insert_id; // Get the ID of the newly inserted sale
 $stmt->close();
 
 // Insert sale items into sale_details table
-$query = "INSERT INTO sale_details (sale_id, product_id, quantity, price, discount, total) VALUES (?, ?, ?, ?, ?, ?)";
+$query = "INSERT INTO sale_details (sale_id, productName, quantity, price, discount, subtotal) VALUES (?, ?, ?, ?, ?, ?)";
 $stmt = $mysqli->prepare($query);
 if (!$stmt) {
     echo json_encode(['success' => false, 'message' => 'Prepare failed: ' . $mysqli->error]);
     exit;
 }
 
-// Fetch product IDs
-$productIds = [];
 foreach ($saleItems as $item) {
-    $stmt = $mysqli->prepare("SELECT product_id FROM products WHERE name = ?");
-    $stmt->bind_param('s', $item['productName']);
-    $stmt->execute();
-    $result = $stmt->get_result();
-    $product = $result->fetch_assoc();
-    $productIds[$item['productName']] = $product['product_id'];
-    $stmt->close();
-}
+    if (!isset($item['productName'], $item['quantity'], $item['unitPrice'], $item['subtotal'])) {
+        echo json_encode(['success' => false, 'message' => 'Missing data for an item']);
+        exit;
+    }
 
-// Insert each item into sale_details
-foreach ($saleItems as $item) {
-    $productId = $productIds[$item['productName']] ?? null;
-    if ($productId) {
-        $stmt->bind_param('iiiddi', $saleId, $productId, $item['quantity'], $item['unitPrice'], 0, $item['subtotal']);
-        if (!$stmt->execute()) {
-            echo json_encode(['success' => false, 'message' => 'Execute failed: ' . $stmt->error]);
-            exit;
-        }
+    $discount = isset($item['discount']) ? floatval($item['discount']) : 0;
+
+    $stmt->bind_param('isiddi', $saleId, $item['productName'], $item['quantity'], $item['unitPrice'], $discount, $item['subtotal']);
+    if (!$stmt->execute()) {
+        echo json_encode(['success' => false, 'message' => 'Execute failed: ' . $stmt->error]);
+        exit;
     }
 }
 $stmt->close();
