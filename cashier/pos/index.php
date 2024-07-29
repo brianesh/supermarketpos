@@ -11,7 +11,7 @@ if (!isset($_SESSION['username']) || ($_SESSION['role'] !== 'cashier' && $_SESSI
 }
 
 // Fetch products from the database
-$query = "SELECT product_id, name, price FROM products";
+$query = "SELECT product_id, name, cost FROM products";
 $result = $mysqli->query($query);
 
 if ($result) {
@@ -106,7 +106,7 @@ $(document).ready(function() {
 
         if (product) {
             itemCount++;
-            const unitPrice = parseFloat(product.price).toFixed(2);
+            const unitPrice = parseFloat(product.cost).toFixed(2);
             const quantity = 1;
             const subtotal = unitPrice * quantity;
 

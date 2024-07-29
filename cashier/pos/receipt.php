@@ -55,8 +55,24 @@ if ($result->num_rows > 0) {
 $method_name = $sale['method_name'];
 $served_by = $sale['full_name'] ?? 'Unknown'; // Provide a default value if full_name is null
 
-// Generate QR Code
-$qrCodeData = "Receipt Number: " . $saleId . "\nDate: " . date('Y-m-d H:i:s', strtotime($sale['created_at'])) . "\nAmount: " . number_format($sale['total_amount'], 2);
+// Collect additional information for the QR code
+$qrCodeData = "FRESHMART SUPERMARKET\n";
+$qrCodeData .= "Date: " . date('Y-m-d H:i:s', strtotime($sale['created_at'])) . "\n";
+$qrCodeData .= "Receipt Number: " . $saleId . "\n";
+$qrCodeData .= "Paid Via: " . htmlspecialchars($method_name) . "\n";
+$qrCodeData .= "Served By: " . htmlspecialchars($served_by) . "\n";
+$qrCodeData .= "Items:\n";
+
+// Add item details to the QR code
+foreach ($items as $item) {
+    $qrCodeData .= htmlspecialchars($item['productName']) . " - ";
+    $qrCodeData .= "Ksh" . number_format($item['price'], 2) . " x ";
+    $qrCodeData .= $item['quantity'] . " = ";
+    $qrCodeData .= "Ksh" . number_format($item['subtotal'], 2) . "\n";
+}
+
+$qrCodeData .= "Grand Total: Ksh" . number_format($sale['total_amount'], 2);
+
 $qrCode = new QrCode($qrCodeData);
 $qrCode->setSize(150);
 $qrCode->setMargin(10);
@@ -128,6 +144,7 @@ $mysqli->close(); // Close the database connection
     <div class="receipt-container">
         <div class="receipt-header">
             <h2>FRESHMART SUPERMARKET</h2>
+            <?php date_default_timezone_set('Africa/Nairobi');?>
             <p>Date: <?php echo date('Y-m-d H:i:s', strtotime($sale['created_at'])); ?></p>
             <h3>00232 RUIRU</h3>
             <h3>Tel: 0758489080</h3>
