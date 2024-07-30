@@ -59,7 +59,23 @@ $method_name = $sale['method_name'];
 $served_by = $sale['full_name'] ?? 'Unknown'; // Provide a default value if full_name is null
 
 // Generate QR Code
-$qrCodeData = "Receipt Number: " . $saleId . "\nDate: " . date('Y-m-d H:i:s', strtotime($sale['created_at'])) . "\nAmount: " . number_format($sale['total_amount'], 2);
+$qrCodeData = "FRESHMART SUPERMARKET\n";
+$qrCodeData .= "Date: " . date('Y-m-d H:i:s', strtotime($sale['created_at'])) . "\n";
+$qrCodeData .= "Receipt Number: " . $saleId . "\n";
+$qrCodeData .= "Address: 00232 RUIRU\n";
+$qrCodeData .= "Tel: 0758489080\n";
+$qrCodeData .= "Email: freshmart@gmail.com\n";
+$qrCodeData .= "Items:\n";
+
+foreach ($items as $item) {
+    $qrCodeData .= $item['productName'] . " - Ksh " . number_format($item['price'], 2) . " x " . $item['quantity'] . " = Ksh " . number_format($item['subtotal'], 2) . "\n";
+}
+
+$qrCodeData .= "Grand Total: Ksh " . number_format($sale['total_amount'], 2) . "\n";
+$qrCodeData .= "Paid Via: " . htmlspecialchars($method_name) . "\n";
+$qrCodeData .= "Served By: " . htmlspecialchars($served_by) . "\n";
+$qrCodeData .= "Cash Received: Ksh " . number_format($cashReceived, 2) . "\n";
+$qrCodeData .= "Balance: Ksh " . number_format($balance, 2);
 $qrCode = new QrCode($qrCodeData);
 $qrCode->setSize(150);
 $qrCode->setMargin(10);
@@ -102,6 +118,7 @@ $mysqli->close(); // Close the database connection
             padding: 10px;
             border: 1px solid #ccc;
             text-align: center;
+            background-color: wheat;
         }
         .receipt-header {
             margin-bottom: 10px;
@@ -116,7 +133,7 @@ $mysqli->close(); // Close the database connection
         }
         .receipt-items th, .receipt-items td {
             padding: 8px;
-            border: 1px solid #ddd;
+            border: 1px solid #000;
         }
         .receipt-total {
             margin-top: 20px;
@@ -136,6 +153,7 @@ $mysqli->close(); // Close the database connection
             <h3>00232 RUIRU</h3>
             <h3>Tel: 0758489080</h3>
             <h3>freshmart@gmail.com</h3>
+            <h3>Receipt Number: <?php echo htmlspecialchars($saleId); ?></h3>
         </div>
         <div class="receipt-items">
             <center><h2>SALE RECEIPT</h2></center>
@@ -171,5 +189,36 @@ $mysqli->close(); // Close the database connection
             <img src="qrcodes/receipt_<?php echo $saleId; ?>.png" alt="QR Code" />
         </div>
     </div>
+
+    <center><div class="buttons">
+            <button class="close-button" onclick="closeReceipt()">Close</button>
+            <button class="generate-button" onclick="generateReceipt()">Generate</button>
+        </div>
+        </center>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        function closeReceipt() {
+            window.location.href = 'index.php';
+        }
+
+        function generateReceipt() {
+            $.post('save_receipt.php', {
+                sale_id: <?php echo $saleId; ?>,
+                receipt_data: <?php echo json_encode($qrCodeData); ?>,
+                printed_at: new Date().toISOString()
+            }, function(response) {
+                if (response.success) {
+                    alert('Receipt successfully generated with Receipt Number: ' + response.receipt_id);
+                } else {
+                    alert('Failed to generate receipt. Please try again.');
+                }
+            }, 'json').fail(function(xhr, status, error) {
+                console.error('Error:', status, error);
+                alert('Failed to generate receipt. Please try again.');
+            });
+        }
+    </script>
 </body>
 </html>
