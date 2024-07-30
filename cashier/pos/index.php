@@ -94,8 +94,7 @@ $mysqli->close();
             <button id="make-sale">Make Sale</button>
         </section>
     </div>
-    <script>
-$(document).ready(function() {
+    <script>$(document).ready(function() {
     const products = <?php echo json_encode($products); ?>;
     let itemCount = 0;
     let grandTotal = 0;
@@ -115,7 +114,7 @@ $(document).ready(function() {
                     <td>${itemCount}</td>
                     <td>${product.name}</td>
                     <td>Ksh ${unitPrice}</td>
-                    <td><input type="number" value="${quantity}" min="1" class="quantity" data-price="${unitPrice}"></td>
+                    <td><center><input type="number" value="${quantity}" min="1" class="quantity" data-price="${unitPrice}" style="width: 70px;"></center></td>
                     <td class="subtotal">Ksh ${subtotal.toFixed(2)}</td>
                     <td><button class="delete-item" data-item="${itemCount}">Delete</button></td>
                 </tr>
@@ -178,23 +177,28 @@ $(document).ready(function() {
                 return;
             }
             requestData.cashReceived = cashReceived;
+        } else if (paymentMethod === 'mpesa') {
+            // Redirect to Mpesa payment page
+            const saleAmount = grandTotal.toFixed(2);
+            window.location.href = `mpesa-integration-php/index.php?amount=${saleAmount}`;
+            return;
         }
 
         $.post('process_sale.php', requestData, function(response) {
-    if (response.success) {
-        if (paymentMethod === 'cash') {
-            const balance = response.balance || 0;
-            alert(`Sale completed successfully. Balance to give: Ksh ${balance.toFixed(2)}`);
-            // Redirect to receipt.php with parameters
-            window.location.href = `receipt.php?sale_id=${response.sale_id}&cash_received=${response.cash_received}&balance=${balance}`;
-        } else {
-            alert('Sale completed successfully.');
-            // Redirect to receipt.php without cash_received and balance
-            window.location.href = `receipt.php?sale_id=${response.sale_id}`;
-        }
-    } else {
-        alert('Sale failed. Please try again.');
-    }
+            if (response.success) {
+                if (paymentMethod === 'cash') {
+                    const balance = response.balance || 0;
+                    alert(`Sale completed successfully. Balance to give: Ksh ${balance.toFixed(2)}`);
+                    // Redirect to receipt.php with parameters
+                    window.location.href = `receipt.php?sale_id=${response.sale_id}&cash_received=${response.cash_received}&balance=${balance}`;
+                } else {
+                    alert('Sale completed successfully.');
+                    // Redirect to receipt.php without cash_received and balance
+                    window.location.href = `receipt.php?sale_id=${response.sale_id}`;
+                }
+            } else {
+                alert('Sale failed. Please try again.');
+            }
         }, 'json').fail(function(xhr, status, error) {
             console.error('Error:', status, error);
             alert('Sale failed. Please try again.');
@@ -206,6 +210,7 @@ $(document).ready(function() {
         $('#grand-total').text(`Ksh ${grandTotal.toFixed(2)}`);
     }
 });
+
 
 </script>
 </body>
