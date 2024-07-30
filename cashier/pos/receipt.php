@@ -17,7 +17,10 @@ if (!isset($_GET['sale_id']) || !is_numeric($_GET['sale_id'])) {
     exit;
 }
 
-$saleId = $_GET['sale_id'];
+$saleId = isset($_GET['sale_id']) ? intval($_GET['sale_id']) : 0;
+$cashReceived = isset($_GET['cash_received']) ? floatval($_GET['cash_received']) : 0;
+$balance = isset($_GET['balance']) ? floatval($_GET['balance']) : 0;
+
 
 // Fetch sale details from the database using prepared statement
 $query = "
@@ -55,24 +58,8 @@ if ($result->num_rows > 0) {
 $method_name = $sale['method_name'];
 $served_by = $sale['full_name'] ?? 'Unknown'; // Provide a default value if full_name is null
 
-// Collect additional information for the QR code
-$qrCodeData = "FRESHMART SUPERMARKET\n";
-$qrCodeData .= "Date: " . date('Y-m-d H:i:s', strtotime($sale['created_at'])) . "\n";
-$qrCodeData .= "Receipt Number: " . $saleId . "\n";
-$qrCodeData .= "Paid Via: " . htmlspecialchars($method_name) . "\n";
-$qrCodeData .= "Served By: " . htmlspecialchars($served_by) . "\n";
-$qrCodeData .= "Items:\n";
-
-// Add item details to the QR code
-foreach ($items as $item) {
-    $qrCodeData .= htmlspecialchars($item['productName']) . " - ";
-    $qrCodeData .= "Ksh" . number_format($item['price'], 2) . " x ";
-    $qrCodeData .= $item['quantity'] . " = ";
-    $qrCodeData .= "Ksh" . number_format($item['subtotal'], 2) . "\n";
-}
-
-$qrCodeData .= "Grand Total: Ksh" . number_format($sale['total_amount'], 2);
-
+// Generate QR Code
+$qrCodeData = "Receipt Number: " . $saleId . "\nDate: " . date('Y-m-d H:i:s', strtotime($sale['created_at'])) . "\nAmount: " . number_format($sale['total_amount'], 2);
 $qrCode = new QrCode($qrCodeData);
 $qrCode->setSize(150);
 $qrCode->setMargin(10);
@@ -178,6 +165,8 @@ $mysqli->close(); // Close the database connection
         </div>
         <h4>Paid Via: <?php echo htmlspecialchars($method_name); ?></h4>
         <h4>Served By: <?php echo htmlspecialchars($served_by); ?></h4>
+        <p>Cash Received: Ksh <?php echo number_format($cashReceived, 2); ?></p>
+        <p>Balance: Ksh <?php echo number_format($balance, 2); ?></p>
         <div class="qr-code">
             <img src="qrcodes/receipt_<?php echo $saleId; ?>.png" alt="QR Code" />
         </div>

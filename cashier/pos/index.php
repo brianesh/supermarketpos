@@ -181,17 +181,20 @@ $(document).ready(function() {
         }
 
         $.post('process_sale.php', requestData, function(response) {
-            if (response.success) {
-                if (paymentMethod === 'cash') {
-                    const balance = response.balance || 0;
-                    alert(`Sale completed successfully. Balance to give: Ksh ${balance.toFixed(2)}`);
-                } else {
-                    alert('Sale completed successfully.');
-                }
-                window.location.href = `receipt.php?sale_id=${response.sale_id}`;
-            } else {
-                alert('Sale failed. Please try again.');
-            }
+    if (response.success) {
+        if (paymentMethod === 'cash') {
+            const balance = response.balance || 0;
+            alert(`Sale completed successfully. Balance to give: Ksh ${balance.toFixed(2)}`);
+            // Redirect to receipt.php with parameters
+            window.location.href = `receipt.php?sale_id=${response.sale_id}&cash_received=${response.cash_received}&balance=${balance}`;
+        } else {
+            alert('Sale completed successfully.');
+            // Redirect to receipt.php without cash_received and balance
+            window.location.href = `receipt.php?sale_id=${response.sale_id}`;
+        }
+    } else {
+        alert('Sale failed. Please try again.');
+    }
         }, 'json').fail(function(xhr, status, error) {
             console.error('Error:', status, error);
             alert('Sale failed. Please try again.');

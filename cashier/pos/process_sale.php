@@ -78,8 +78,10 @@ if ($paymentMethod === 'cash') {
         echo json_encode(['success' => false, 'message' => 'Insufficient cash received']);
         exit;
     }
+    
     $balance = $cashReceived - $totalAmount;
     $response['balance'] = $balance;
+    $response['cash_received'] = $cashReceived;
 }
 
 // Close database connection
