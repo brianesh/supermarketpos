@@ -25,7 +25,7 @@ $result = $mysqli->query($query);
     </div>
         <ul>
             <li><a href="../index.php">Dashboard</a></li>
-            <li><a href="../store/index">Stores</a></li>
+            <li><a href="../store/index.php">Stores</a></li>
             <li><a href="../users/index.php">Users</a></li>
             <li><a href="">Suppliers</a></li>
             <li><a href="../category/index.php">Category</a></li>
